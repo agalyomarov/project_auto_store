@@ -1,14 +1,14 @@
 //  load("D:\\autoStore\\CreateDataBase.js")
-db.SupplierCategory.drop();
-db.Suppliers.drop();
-db.ProductDirectory.drop();
-db.RequestsFromBuyers.drop();
-db.Orders.drop();
-db.Suppy.drop();
-db.Warehouse.drop();
-db.Purchases.drop();
-db.Defective.drop();
-db.Refunds.drop();
+db.supplier_categories.drop();
+db.suppliers.drop();
+db.product_directory.drop();
+db.requests_from_buyers.drop();
+db.orders.drop();
+db.suppy.drop();
+db.ware_house.drop();
+db.purchases.drop();
+db.defective.drop();
+db.refunds.drop();
 
 load("./SupplierCategory.js");
 load("./Suppliers.js");
