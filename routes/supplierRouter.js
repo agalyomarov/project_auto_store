@@ -31,6 +31,8 @@ router.post("/", async(req, res) => {
             telefone: req.body.telefone,
             supplierCategory: req.body.supplierCategory,
             address: req.body.address,
+            yearsWarranty: req.body.yearsWarranty,
+            treaty: req.body.treaty,
         }, { upsert: true });
         res.redirect("/");
     } catch (err) {
@@ -55,7 +57,7 @@ router.get("/edit/:id", async(req, res) => {
 
 router.get("/delete/:id", async(req, res) => {
     try {
-        const supplier = await Supplier.findOneAndDelete({ _id: req.params.id });
+        await Supplier.findOneAndDelete({ _id: req.params.id });
         res.redirect("/");
     } catch (err) {
         console.log(err);

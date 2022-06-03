@@ -13,6 +13,12 @@ const supplierSchema = new Schema({
     telefone: {
         type: String,
     },
+    yearsWarranty: {
+        type: Number,
+    },
+    treaty: {
+        type: String,
+    },
     supplierCategory: {
         type: Object,
     },

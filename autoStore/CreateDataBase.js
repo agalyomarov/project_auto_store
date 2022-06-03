@@ -1,7 +1,7 @@
 //  load("D:\\autoStore\\CreateDataBase.js")
 db.supplier_categories.drop();
 db.suppliers.drop();
-db.product_directory.drop();
+db.product_directories.drop();
 db.requests_from_buyers.drop();
 db.orders.drop();
 db.suppy.drop();

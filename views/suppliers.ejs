@@ -13,7 +13,7 @@
     <%- include('./partials/nav.ejs')%>
         <div class="container">
             <h1 class="text-center mt-4">Добавить поставщик</h1>
-            <form class="col-6" method="post" action="/">
+            <form class="col-6 mb-5" method="post" action="/">
                 <div class="mb-3">
                     <label class="form-label">Фио</label>
                     <input type="text" class="form-control" name="fullName" value="<%= supplier.fullName%>">
@@ -31,6 +31,17 @@
                     <input type="text" class="form-control" name="telefone" value="<%= supplier.telefone%>">
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Гарантия</label>
+                    <input type="number" class="form-control" name="yearsWarranty" value="<%= supplier.yearsWarranty%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Договор</label>
+                    <select class="form-select" name="treaty">
+                        <option value="Нет">Нет</option>
+                        <option value="Да">Да</option>
+                    </select>
+                </div>
+                <div class="mb-3">
                     <label class="form-label"> Категория</label>
                     <select class="form-select" name="supplierCategory">
                         <% supplier_categories.forEach(function(category){ %>
@@ -45,7 +56,7 @@
                     <%= supplier._id ? 'Изменить' : 'Добавить' %>
                 </button>
             </form>
-            <h1 class="text-center mt-4">Поставщики</h1>
+            <hr>
             <% suppliers.forEach(function(supplier,index){ %>
                 <div class="supplier mt-4">
                     <div class="h3">
@@ -60,11 +71,17 @@
                     <p>телефоне :
                         <%=supplier.telefone %>
                     </p>
-                    <p>категория :
-                        <%=supplier.supplierCategory.title %>
+                    <p>Гарантия :
+                        <%=supplier.yearsWarranty ? supplier.yearsWarranty : 'нет' %>
                     </p>
-                    <a href="edit/<%= supplier._id%>" class="btn btn-success">Изменить</a>
-                    <a href="delete/<%= supplier._id%>" class="btn btn-danger">Удалить</a>
+                    <p>Договор :
+                        <%=supplier.treaty ? supplier.treaty : 'нет' %>
+                    </p>
+                    <p>категория :
+                        <%= supplier.supplierCategory ? supplier.supplierCategory.title : '' %>
+                    </p>
+                    <a href="/edit/<%= supplier._id%>" class="btn btn-success">Изменить</a>
+                    <a href="/delete/<%= supplier._id%>" class="btn btn-danger">Удалить</a>
                     <hr>
                 </div>
                 <% })%>

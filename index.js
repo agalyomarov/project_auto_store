@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const supplierRouter = require("./routes/supplierRouter");
+const productDirectoryRouter = require("./routes/productDirectory");
 const mongoose = require("mongoose");
 const app = express();
 
@@ -11,6 +12,7 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", supplierRouter);
+app.use("/product_directory", productDirectoryRouter);
 
 function start() {
     try {
