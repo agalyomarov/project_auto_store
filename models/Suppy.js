@@ -10,6 +10,9 @@ const suppySchema = new Schema({
     deliveryDate: {
         type: Date,
     },
+    added_cell: {
+        type: Boolean,
+    },
 });
 
 const Suppy = mongoose.model("suppies", suppySchema);

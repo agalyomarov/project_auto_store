@@ -8,7 +8,9 @@ const router = express.Router();
 router.get("/", async(req, res) => {
     try {
         const product_directories = await ProductDirectory.find();
-        const requestsFromBuyers = await RequestsFromBuyers.find();
+        const requestsFromBuyers = await (
+            await RequestsFromBuyers.find()
+        ).reverse();
         res.render(createPath("request_from_buyers"), {
             product_directories,
             requestsFromBuyers,

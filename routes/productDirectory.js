@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", async(req, res) => {
     try {
-        const product_directories = await ProductDirectory.find();
+        const product_directories = await (await ProductDirectory.find()).reverse();
         const suppliers = await Supplier.find();
         const product = {};
         res.render(createPath("product_directories"), {

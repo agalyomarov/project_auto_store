@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", async(req, res) => {
     try {
         const supplier_categories = await SupplierCategory.find();
-        const suppliers = await Supplier.find();
+        const suppliers = await (await Supplier.find()).reverse();
         const supplier = {};
         res.render(createPath("suppliers"), {
             suppliers,

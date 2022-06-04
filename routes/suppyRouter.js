@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", async(req, res) => {
     try {
         const orders = await Order.find();
-        const suppies = await Suppy.find();
+        const suppies = await (await Suppy.find()).reverse();
         const suppy = {};
         res.render(createPath("suppies"), {
             suppies,
@@ -29,6 +29,7 @@ router.post("/", async(req, res) => {
             paymentOfTheFee: req.body.paymentOfTheFee,
             orderDate: new Date(),
             deliveryDate: new Date(),
+            add_cell: false,
         }, { upsert: true });
         res.redirect("/suppy");
     } catch (err) {

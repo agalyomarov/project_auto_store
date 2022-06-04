@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>AutoStore</title>
+</head>
+
+<body>
+    <%- include('./partials/nav.ejs')%>
+        <div class="container">
+            <h1 class="text-center mt-4">Товары на складе</h1>
+            <% if(cell){%>
+                <form class="mt-5 mb-5" method="post" action="/cells">
+                    <div class="mb-3">
+                        <h3>Номер ячейки :
+                            <%= cell.numberBox%>
+                        </h3>
+                        <label class="form-label">Товар</label>
+                        <select class="form-select" name="product">
+                            <% products.forEach(function(product){ %>
+                                <option value="<%= product._id%>" class="mb-3" <%=cell && cell.product._id.toString()==product._id.toString() ? 'selected' : '' %>>
+                                    Имя: <%= product.name %>, Поставшик:
+                                        <%= product.supplier.fullName %>,
+                                </option>
+                                <% }); %>
+                        </select>
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label class="form-label">Количество</label>
+                        <input type="number" class="form-control" name="quantity" value="<%=cell.quantity%>">
+                    </div>
+                    <input type="hidden" value="<%=cell._id ? cell._id: '000000000000' %>" name="_id">
+                    <button type="submit" class="btn btn-primary">
+                        <%= cell._id ? 'Изменить' :'Добавить' %>
+                    </button>
+                </form>
+                <% } %>
+                    <hr>
+                    <% cells.forEach((cell,index)=>{ %>
+                        <div class="cell mb-3">
+                            <h3>Номер ячейки :
+                                <%= cell.numberBox %>
+                            </h3>
+                            <p><b>Товар : </b>
+                                <%=cell.product.name%>, Цена:
+                                    <%= cell.product.price%>, Поставшик :
+                                        <%= cell.product.supplier.fullName%>
+                            </p>
+                            <p>Количество :
+                                <%= cell.quantity%>
+                            </p>
+                            <a href="/cells/edit/<%= cell._id%>" class="btn btn-success">Изменить</a>
+                            <a href="/cells/delete/<%= cell._id%>" class="btn btn-danger">Освобадить ячеек</a>
+                        </div>
+                        <hr>
+                        <%})%>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+
+</html>

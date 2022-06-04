@@ -59,7 +59,12 @@
                                     </p>
                                     <a href="/suppy/edit/<%= suppy._id%>" class="btn btn-success">Изменить</a>
                                     <a href="/suppy/delete/<%= suppy._id%>" class="btn btn-danger">Удалить</a>
-                                    <hr>
+                                    <% if(suppy.added_cell){ %>
+                                        <div class="btn btn-info">Добавлен на склад</div>
+                                        <%} else {%>
+                                            <a href="/cells/store/<%= suppy._id%>" class="btn btn-secondary">Добавить на склад</a>
+                                            <%}%>
+                                                <hr>
                 </div>
                 <% })%>
         </div>

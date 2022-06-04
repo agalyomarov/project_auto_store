@@ -5,6 +5,7 @@ const productDirectoryRouter = require("./routes/productDirectory");
 const requestFromBuyersRouter = require("./routes/requestFromBuyers");
 const orderRouter = require("./routes/orderRouter");
 const suppyRouter = require("./routes/suppyRouter");
+const cellsRouter = require("./routes/cellsRouter");
 const mongoose = require("mongoose");
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/product_directory", productDirectoryRouter);
 app.use("/request_from_buyers", requestFromBuyersRouter);
 app.use("/order", orderRouter);
 app.use("/suppy", suppyRouter);
+app.use("/cells", cellsRouter);
 
 function start() {
     try {

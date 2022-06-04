@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", async(req, res) => {
     try {
-        const orders = await Order.find();
+        const orders = await (await Order.find()).reverse();
         const products = await ProductDirectory.find();
         const order = {};
         res.render(createPath("orders"), {
@@ -29,6 +29,7 @@ router.post("/", async(req, res) => {
             quantity: req.body.quantity,
             manager: req.body.manager,
             orderDate: new Date(),
+            price: parseInt(req.body.quantity) * product.price,
         }, { upsert: true });
         res.redirect("/order");
     } catch (err) {
