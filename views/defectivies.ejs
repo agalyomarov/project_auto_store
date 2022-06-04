@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>AutoStore</title>
+</head>
+
+<body>
+    <%- include('./partials/nav.ejs')%>
+        <div class="container">
+            <h1 class="text-center mt-4">Добавить дефект</h1>
+            <form class="col-6 mb-5" method="post" action="/defective/s">
+                <div class="mb-3">
+                    <label class="form-label">Товары</label>
+                    <select class="form-select" name="product">
+                        <% products.forEach(function(product){ %>
+                            <option value="<%= product._id%>" class="mb-3">
+                                Имя: <%= product.name %>, Цена:
+                                    <%= product.price %>, Поставшик:
+                                        <%= product.supplier.fullName %>,
+                            </option>
+                            <% }); %>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Количество</label>
+                    <input type="number" class="form-control" name="quantity">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Фио покупателя</label>
+                    <input type="text" class="form-control" name="buyer">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Описание дефекта</label>
+                    <input type="text" class="form-control" name="defectDescription">
+                </div>
+                <button type=" submit " class="btn btn-primary ">
+                    <%= 'Добавить' %>
+                </button>
+            </form>
+            <hr>
+            <% defectivies.forEach((defective)=>{ %>
+                <div class="defective mb-3">
+                    <h3>
+                        Покупател :
+                        <%=defective.buyer%>
+                    </h3>
+                    <p><b>Товар</b><br> Имя :
+                        <%= defective.product.name %>,Цена :
+                            <%= defective.product.price %>,Поставшик :
+                                <%= defective.product.supplier.fullName %>
+                                    <br>Количество :
+                                    <%= defective.quantity%>
+                    </p>
+                    <p><b>Описание дефекта </b><br>
+                        <%= defective.defectDescription %>
+                    </p>
+                    <p><b>Время и дата дефекта </b><br>
+                        <%= new Date(Date.parse(defective.date)).toLocaleString()%>
+                    </p>
+                    <a href="/defective/delete/<%= defective._id%>" class="btn btn-danger">Удалить</a>
+                    <% if(defective.refunded){ %>
+                        <div class="btn btn-info">Возвращен поставщикy</div>
+                        <% }else{%>
+                            <a href="/refund/store/<%= defective._id%>" class="btn btn-warning">Возврат</a>
+                            <%}%>
+                </div>
+                <hr>
+                <%}) %>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js " integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2 " crossorigin="anonymous "></script>
+</body>
+
+</html>

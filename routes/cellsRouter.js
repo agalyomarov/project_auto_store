@@ -32,6 +32,7 @@ router.get("/store/:id", async(req, res) => {
             product: suppy.order.product,
             quantity: suppy.order.quantity,
             numberBox,
+            added_date: new Date(),
         });
         await cell.save();
         res.redirect("/cells");

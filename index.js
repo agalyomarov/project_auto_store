@@ -6,6 +6,9 @@ const requestFromBuyersRouter = require("./routes/requestFromBuyers");
 const orderRouter = require("./routes/orderRouter");
 const suppyRouter = require("./routes/suppyRouter");
 const cellsRouter = require("./routes/cellsRouter");
+const purchasesRouter = require("./routes/purchasesRouter");
+const defectiveRouter = require("./routes/defectiveRouter");
+const refundRouter = require("./routes/refundRouter");
 const mongoose = require("mongoose");
 const app = express();
 
@@ -21,6 +24,9 @@ app.use("/request_from_buyers", requestFromBuyersRouter);
 app.use("/order", orderRouter);
 app.use("/suppy", suppyRouter);
 app.use("/cells", cellsRouter);
+app.use("/purchases", purchasesRouter);
+app.use("/defective", defectiveRouter);
+app.use("/refund", refundRouter);
 
 function start() {
     try {

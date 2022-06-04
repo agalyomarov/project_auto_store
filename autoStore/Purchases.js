@@ -4,7 +4,7 @@
 
 let Purchases1 = db.purchases.insertOne({
     products: [{
-        product: db.product_directory.findOne({
+        product: db.product_directories.findOne({
             _id: cabinFilterCarbon1.insertedId,
         }),
         quantity: 1,
@@ -16,7 +16,7 @@ let Purchases1 = db.purchases.insertOne({
 
 let Purchases2 = db.purchases.insertOne({
     products: [{
-        product: db.product_directory.findOne({ _id: halogenLamp3.insertedId }),
+        product: db.product_directories.findOne({ _id: halogenLamp3.insertedId }),
         quantity: 1,
     }, ],
     totalAmount: 786,
@@ -26,7 +26,7 @@ let Purchases2 = db.purchases.insertOne({
 
 let Purchases4 = db.purchases.insertOne({
     products: [{
-        product: db.product_directory.findOne({ _id: brakePads4.insertedId }),
+        product: db.product_directories.findOne({ _id: brakePads4.insertedId }),
         quantity: 1,
     }, ],
     totalAmount: 2555,

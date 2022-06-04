@@ -10,6 +10,9 @@ const cellsSchema = new Schema({
     quantity: {
         type: Number,
     },
+    added_date: {
+        type: Date,
+    },
 });
 
 const Cells = mongoose.model("cells", cellsSchema);
