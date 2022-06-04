@@ -38,7 +38,7 @@
                     <label class="form-label">Поставшик</label>
                     <select class="form-select" name="supplier">
                         <% suppliers.forEach(function(supplier){ %>
-                            <option value="<%=supplier._id %>">
+                            <option value="<%=supplier._id %>" <%=product.supplier && supplier._id.toString()==product.supplier._id.toString() ? 'selected' : '' %>>
                                 <%= supplier.fullName%>
                             </option>
                             <% }); %>

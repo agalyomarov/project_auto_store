@@ -2,19 +2,21 @@ const express = require("express");
 const path = require("path");
 const supplierRouter = require("./routes/supplierRouter");
 const productDirectoryRouter = require("./routes/productDirectory");
-const requestFromBuyers = require("./routes/requestFromBuyers");
+const requestFromBuyersRouter = require("./routes/requestFromBuyers");
+const orderRouter = require("./routes/orderRouter");
 const mongoose = require("mongoose");
 const app = express();
 
 const MONGODB_URL = "mongodb://127.0.0.1/auto_store";
-const PORT = 3000;
+const PORT = 80;
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", supplierRouter);
 app.use("/product_directory", productDirectoryRouter);
-app.use("/request_from_buyers", requestFromBuyers);
+app.use("/request_from_buyers", requestFromBuyersRouter);
+app.use("/order", orderRouter);
 
 function start() {
     try {

@@ -43,11 +43,17 @@
                             <%=request.totalAmount %>
                         </b>
                     </p>
+                    <p>
+                        <b>
+                            Дата и Время :
+                            <%=new Date(Date.parse(request.orderDate)).toLocaleString() %>
+                        </b>
+                    </p>
                     <h5>Продукты</h5>
                     <% for (let i=0; i < request.products.length; i++) {%>
                         <p>
                             <b>
-                                <%=i+1%>. количество : <%= request.products[i].quantity%>, имя : <%= request.products[i].product.name%>, поставщик : <%= request.products[i].product.supplier.fullName%>, цена : <%= request.products[i].product.price%>
+                                <%=i+1%>. Количество : <%= request.products[i].quantity%>, Имя : <%= request.products[i].product.name%>, Поставщик : <%= request.products[i].product.supplier.fullName%>, Цена : <%= request.products[i].product.price%>
                             </b>
                         </p>
                         <%}%>
