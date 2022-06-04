@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>AutoStore</title>
+</head>
+
+<body>
+    <%- include('./partials/nav.ejs')%>
+        <div class="container">
+            <h1 class="text-center mt-4">Добавить поставка</h1>
+            <form class=" mb-5" method="post" action="/suppy">
+                <div class="mb-3">
+                    <label class="form-label">Заказы</label>
+                    <select class="form-select" name="order">
+                        <% orders.forEach(function(order){ %>
+                            <option value="<%= order._id%>" class="mb-3" <%=suppy.order && suppy.order._id.toString()==order._id.toString() ? 'selected' : '' %>>
+                                Товар: <%= order.product.name %>, Поставшик:
+                                    <%= order.product.supplier.fullName %>,
+                                        Менеджер:
+                                        <%= order.manager %>,
+                                            <%= new Date(Date.parse(order.orderDate)).toLocaleString() %>,
+                            </option>
+                            <% }); %>
+                    </select>
+                </div>
+                <div class="mb-3 col-6">
+                    <label class="form-label">Опалата за пошлины</label>
+                    <input type="number" class="form-control" name="paymentOfTheFee" value="<%=suppy.paymentOfTheFee%>">
+                </div>
+                <input type="hidden" value="<%= suppy._id ?suppy._id: '000000000000'  %>" name="_id">
+                <button type="submit" class="btn btn-primary">
+                    <%= suppy._id ? 'Изменить' :'Добавить' %>
+                </button>
+            </form>
+            <hr>
+            <% suppies.forEach(function(suppy,index){ %>
+                <div class="order mt-4">
+                    <div class="h3">
+                        Дата и Время поставки
+                        <%= new Date(Date.parse(suppy.deliveryDate)).toLocaleString() %>
+                    </div>
+                    <h5>Заказ</h5>
+                    <b>Товар:</b>
+                    <%= suppy.order.product.name %>, Поставшик:
+                        <%= suppy.order.product.supplier.fullName %>, Менеджер:
+                            <%= suppy.order.manager %>, Количество:
+                                <%=suppy.order.quantity %>
+                                    <p>
+                                        Дата и Время заказа :
+                                        <%=new Date(Date.parse(suppy.order.orderDate)).toLocaleString() %>
+                                    </p>
+                                    <p>Оплата за пошлины :
+                                        <%=suppy.paymentOfTheFee %>
+                                    </p>
+                                    <a href="/suppy/edit/<%= suppy._id%>" class="btn btn-success">Изменить</a>
+                                    <a href="/suppy/delete/<%= suppy._id%>" class="btn btn-danger">Удалить</a>
+                                    <hr>
+                </div>
+                <% })%>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+
+</html>
