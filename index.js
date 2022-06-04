@@ -9,6 +9,7 @@ const cellsRouter = require("./routes/cellsRouter");
 const purchasesRouter = require("./routes/purchasesRouter");
 const defectiveRouter = require("./routes/defectiveRouter");
 const refundRouter = require("./routes/refundRouter");
+const staticRouter = require("./routes/staticRouter");
 const mongoose = require("mongoose");
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/cells", cellsRouter);
 app.use("/purchases", purchasesRouter);
 app.use("/defective", defectiveRouter);
 app.use("/refund", refundRouter);
+app.use("/static", staticRouter);
 
 function start() {
     try {

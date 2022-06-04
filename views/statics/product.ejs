@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>AutoStore</title>
+</head>
+
+<body>
+    <%- include('../partials/nav.ejs')%>
+        <div class="container">
+            <h1 class="text-center mt-4">Статистика</h1>
+            <%- include('../partials/static_header.ejs')%>
+                <h2 class="mt-5">Продукты :</h2>
+                <% suppies.forEach(function(suppy){ %>
+                    <div class="product mt-3">
+                        <h4>
+                            Имя :
+                            <%=suppy.order.product.name%>
+                        </h4>
+                        <p>Категория :
+                            <%=suppy.order.product.category%>
+                        </p>
+                        <p>manufacturer :
+                            <%=suppy.order.product.manufacturer%>
+                        </p>
+                        <p>Article :
+                            <%=suppy.order.product.article%>
+                        </p>
+                        <p>Цена :
+                            <%=suppy.order.product.price%>
+                        </p>
+                        <p> <b>Поставшик: </b> Имя :
+                            <%=suppy.order.product.supplier.fullName%>,Категория :
+                                <%=suppy.order.product.supplier.supplierCategory.title%>
+                        </p>
+                        <p>Дата и время поставки :
+                            <%=new Date(Date.parse(suppy.deliveryDate)).toLocaleString()%>
+                        </p>
+                        <form action="/static/buyer" method="POST">
+                            <label>От</label>
+                            <input type="date" name="start">
+                            <label class="ms-5">До</label>
+                            <input type="date" name="end">
+                            <input type="hidden" name="_id" value="<%= suppy.order.product._id%>">
+                            <button type="submit" class="btn btn-primary ms-4">Показать покупатели</button>
+                        </form>
+                        <hr>
+                    </div>
+                    <% }) %>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+
+</html>

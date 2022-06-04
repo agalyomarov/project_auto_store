@@ -23,8 +23,8 @@ router.post("/", async(req, res) => {
         const keys = Object.keys(req.body);
         const values = Object.values(req.body);
         const products = [];
-        for (let i = 0; i < keys.length - 1; i++) {
-            if (values[i]) {
+        for (let i = 0; i < values.length - 1; i++) {
+            if (parseInt(values[i]) > 0) {
                 const object = {};
                 const cell = await Cells.findOne({ _id: keys[i] });
                 await Cells.findOneAndUpdate({ _id: keys[i] }, {
@@ -32,7 +32,7 @@ router.post("/", async(req, res) => {
                 });
                 object.product = cell.product;
                 object.quantity = values[i];
-                products[i] = object;
+                products[products.length] = object;
             }
         }
         let totalAmount = 0;
