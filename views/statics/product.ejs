@@ -40,6 +40,10 @@
                         <p>Дата и время поставки :
                             <%=new Date(Date.parse(suppy.deliveryDate)).toLocaleString()%>
                         </p>
+                        <form action="/static/supplier" method="get">
+                            <input type="hidden" name="name" value="<%= suppy.order.product.name%>">
+                            <button type="submit" class="btn btn-success mb-4">Показать поставщики</button>
+                        </form>
                         <form action="/static/buyer" method="POST">
                             <label>От</label>
                             <input type="date" name="start">

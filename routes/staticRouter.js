@@ -6,16 +6,6 @@ const Purchases = require("../models/Purchases");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async(req, res) => {
-    try {
-        const suppliers = await (await Supplier.find()).reverse();
-        // console.log(suppliers);
-        res.render(createPath("statics/supplier"), { suppliers });
-    } catch (err) {
-        console.log(err);
-    }
-});
-
 router.get("/product", async(req, res) => {
     try {
         const suppies = await (await Suppy.find()).reverse();
@@ -42,6 +32,26 @@ router.post("/buyer", async(req, res) => {
             }
         }
         res.render(createPath("statics/buyer"), { purchases });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+router.get("/supplier", async(req, res) => {
+    try {
+        const suppliers = await ProductDirectory.aggregate([
+            { $match: { name: req.query.name } },
+            {
+                $group: {
+                    _id: "$supplier.fullName",
+                    supplier: {
+                        $addToSet: { supplier: "$supplier" },
+                    },
+                },
+            },
+        ]);
+        console.log(suppliers[0].supplier);
+        res.send("test");
     } catch (err) {
         console.log(err);
     }

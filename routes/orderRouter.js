@@ -21,16 +21,29 @@ router.get("/", async(req, res) => {
 
 router.post("/", async(req, res) => {
     try {
+        // console.log(req.body);
         const product = await ProductDirectory.findOne({
             _id: req.body.product,
         });
-        await Order.findOneAndUpdate({ _id: req.body._id }, {
-            product,
-            quantity: req.body.quantity,
-            manager: req.body.manager,
-            orderDate: new Date(),
-            price: parseInt(req.body.quantity) * product.price,
-        }, { upsert: true });
+        if (req.body._id == "000000000000") {
+            const order = new Order({
+                product,
+                quantity: req.body.quantity,
+                manager: req.body.manager,
+                orderDate: new Date(),
+                price: parseInt(req.body.quantity) * product.price,
+            });
+            await order.save();
+        } else {
+            await Order.findOneAndUpdate({ _id: req.body._id }, {
+                product,
+                quantity: req.body.quantity,
+                manager: req.body.manager,
+                orderDate: new Date(),
+                price: parseInt(req.body.quantity) * product.price,
+            }, { upsert: true });
+        }
+
         res.redirect("/order");
     } catch (err) {
         console.log(err);

@@ -21,18 +21,32 @@ router.get("/", async(req, res) => {
 
 router.post("/", async(req, res) => {
     try {
+        console.log(req.body);
         const supplier = await Supplier.findOne({
             _id: req.body.supplier,
         });
         req.body.supplier = supplier;
-        await ProductDirectory.findOneAndUpdate({ _id: req.body._id }, {
-            name: req.body.name,
-            category: req.body.category,
-            manufacturer: req.body.manufacturer,
-            article: req.body.article,
-            price: req.body.price,
-            supplier: req.body.supplier,
-        }, { upsert: true });
+        if (req.body._id == "000000000000") {
+            const product = new ProductDirectory({
+                name: req.body.name,
+                category: req.body.category,
+                manufacturer: req.body.manufacturer,
+                article: req.body.article,
+                price: req.body.price,
+                supplier: req.body.supplier,
+            });
+            await product.save();
+        } else {
+            await ProductDirectory.findOneAndUpdate({ _id: req.body._id }, {
+                name: req.body.name,
+                category: req.body.category,
+                manufacturer: req.body.manufacturer,
+                article: req.body.article,
+                price: req.body.price,
+                supplier: req.body.supplier,
+            }, { upsert: true });
+        }
+
         res.redirect("/product_directory");
     } catch (err) {
         console.log(err);

@@ -21,19 +21,28 @@ router.get("/", async(req, res) => {
 
 router.post("/", async(req, res) => {
     try {
-        const supplier_category = await SupplierCategory.findOne({
-            _id: req.body.supplierCategory,
-        });
-        req.body.supplierCategory = supplier_category;
-        await Supplier.findOneAndUpdate({ _id: req.body._id }, {
-            fullName: req.body.fullName,
-            country: req.body.country,
-            telefone: req.body.telefone,
-            supplierCategory: req.body.supplierCategory,
-            address: req.body.address,
-            yearsWarranty: req.body.yearsWarranty,
-            treaty: req.body.treaty,
-        }, { upsert: true });
+        if (req.body._id == "000000000000") {
+            const supplier = new Supplier({
+                fullName: req.body.fullName,
+                country: req.body.country,
+                telefone: req.body.telefone,
+                supplierCategory: req.body.supplierCategory,
+                address: req.body.address,
+                yearsWarranty: req.body.yearsWarranty,
+                treaty: req.body.treaty,
+            });
+            await supplier.save();
+        } else {
+            await Supplier.findOneAndUpdate({ _id: req.body._id }, {
+                fullName: req.body.fullName,
+                country: req.body.country,
+                telefone: req.body.telefone,
+                supplierCategory: req.body.supplierCategory,
+                address: req.body.address,
+                yearsWarranty: req.body.yearsWarranty,
+                treaty: req.body.treaty,
+            });
+        }
         res.redirect("/");
     } catch (err) {
         console.log(err);

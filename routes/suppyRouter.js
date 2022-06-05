@@ -24,13 +24,25 @@ router.post("/", async(req, res) => {
         const order = await Order.findOne({
             _id: req.body.order,
         });
-        await Suppy.findOneAndUpdate({ _id: req.body._id }, {
-            order,
-            paymentOfTheFee: req.body.paymentOfTheFee,
-            orderDate: new Date(),
-            deliveryDate: new Date(),
-            add_cell: false,
-        }, { upsert: true });
+        if (req.body._id == "000000000000") {
+            const suppy = new Suppy({
+                order,
+                paymentOfTheFee: req.body.paymentOfTheFee,
+                orderDate: new Date(),
+                deliveryDate: new Date(),
+                add_cell: false,
+            });
+            await suppy.save();
+        } else {
+            await Suppy.findOneAndUpdate({ _id: req.body._id }, {
+                order,
+                paymentOfTheFee: req.body.paymentOfTheFee,
+                orderDate: new Date(),
+                deliveryDate: new Date(),
+                add_cell: false,
+            }, { upsert: true });
+        }
+
         res.redirect("/suppy");
     } catch (err) {
         console.log(err);
