@@ -14,13 +14,16 @@
         <div class="container">
             <h1 class="text-center mt-4">Статистика</h1>
             <%- include('../partials/static_header.ejs')%>
-                <h2 class="mt-5">Продукты :</h2>
+                <h2 class="mt-5">TOP 10 продукт :</h2>
                 <% products.forEach(function(product){ %>
                     <div class="product mt-3">
                         <h4>
                             Имя :
                             <%=product.name%>
                         </h4>
+                        <p>Продано :
+                            <%=product.count%> штук
+                        </p>
                         <p>Категория :
                             <%=product.category%>
                         </p>

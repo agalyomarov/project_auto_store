@@ -17,20 +17,16 @@ router.get("/product", async(req, res) => {
 
 router.post("/buyer", async(req, res) => {
     try {
-        const needPurchases = await Purchases.find({
-            dateOfPurchase: { $gte: req.body.start, $lte: req.body.end },
-        });
-        const purchases = [];
-        for (let i = 0; i < needPurchases.length; i++) {
-            for (let j = 0; j < needPurchases[i].products.length; j++) {
-                if (
-                    req.body._id.toString() ==
-                    needPurchases[i].products[j].product._id.toString()
-                ) {
-                    purchases.push(needPurchases[i]);
-                }
-            }
-        }
+        // console.log(req.body);
+        let purchases = await Purchases.aggregate([{
+            $match: {
+                dateOfPurchase: {
+                    $gte: new Date(Date.parse(req.body.start)),
+                    $lte: new Date(Date.parse(req.body.end)),
+                },
+                "products.product.name": req.body.name,
+            },
+        }, ]);
         res.render(createPath("statics/buyer"), { purchases });
     } catch (err) {
         console.log(err);
@@ -43,13 +39,17 @@ router.get("/supplier", async(req, res) => {
             { $match: { name: req.query.name } },
             {
                 $group: {
-                    _id: "$supplier.fullName",
-                    counry: supplier.country,
+                    _id: "$supplier._id",
+                    fullName: { $first: "$supplier.fullName" },
+                    country: { $first: "$supplier.country" },
+                    address: { $first: "$supplier.address" },
+                    telefone: { $first: "$supplier.telefone" },
+                    category: { $first: "$supplier.supplierCategory.title" },
                 },
             },
         ]);
-        console.log(suppliers);
-        res.send("test");
+        // console.log(suppliers);
+        res.render(createPath("statics/supplier"), { suppliers });
     } catch (err) {
         console.log(err);
     }
@@ -61,33 +61,116 @@ router.get("/buyer", async(req, res) => {
 
 router.get("/top_10_product", async(req, res) => {
     try {
-        const allPurchases = await Purchases.find();
-        let products = [];
-        for (let i = 0; i < allPurchases.length; i++) {
-            for (let j = 0; j < allPurchases[i].products.length; j++) {
-                if (products[allPurchases[i].products[j].product._id]) {
-                    products[allPurchases[i].products[j].product._id] =
-                        parseInt(products[allPurchases[i].products[j].product._id]) + 1;
-                } else {
-                    products[allPurchases[i].products[j].product._id] = 1;
-                }
-            }
-        }
-        var tuples = [];
-        for (var key in products) tuples.push([key, products[key]]);
-        tuples.sort(function(a, b) {
-            a = a[1];
-            b = b[1];
-            return a < b ? -1 : a > b ? 1 : 0;
-        });
-        products = [];
-        for (var i = 0; i < tuples.length; i++) {
-            if (i < 10) {
-                products[i] = await ProductDirectory.findOne({ _id: tuples[i][0] });
-            }
-        }
-        console.log(tuples);
+        const products = await Purchases.aggregate([
+            { $unwind: "$products" },
+            {
+                $replaceRoot: { newRoot: "$products" },
+            },
+            {
+                $group: {
+                    _id: "$product._id",
+                    count: { $sum: "$quantity" },
+                    name: { $first: "$product.name" },
+                    manufacturer: { $first: "$product.manufacturer" },
+                    article: { $first: "$product.article" },
+                    price: { $first: "$product.price" },
+                    supplier: { $first: "$product.supplier" },
+                },
+            },
+            { $sort: { count: 1 } },
+            { $limit: 10 },
+        ]);
         res.render(createPath("statics/top_10_product"), { products });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+router.get("/10_nice_supplier", async(req, res) => {
+    try {
+        const suppliers = await ProductDirectory.aggregate([
+            { $sort: { price: 1 } },
+            {
+                $group: {
+                    _id: "$name",
+                    supplier: {
+                        $first: "$supplier",
+                    },
+                },
+            },
+            { $replaceRoot: { newRoot: "$supplier" } },
+            { $limit: 10 },
+        ]);
+        // console.log(suppliers);
+        res.render(createPath("statics/10_nice_supplier"), { suppliers });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+router.post("/dolya_probyl", async(req, res) => {
+    try {
+        console.log(req.body);
+        const percent = await Purchases.aggregate([{
+                $match: {
+                    dateOfPurchase: {
+                        $gte: new Date(Date.parse(req.body.start)),
+                        $lte: new Date(Date.parse(req.body.end)),
+                    },
+                },
+            },
+            { $replaceRoot: { newRoot: { products: "$products" } } },
+            { $unwind: "$products" },
+            {
+                $project: {
+                    _id: "$products.product._id",
+                    name: "$products.product.name",
+                    article: "$products.product.article",
+                    price: "$products.product.price",
+                    quantity: "$products.quantity",
+                    totalAmount: {
+                        $multiply: ["$products.product.price", "$products.quantity"],
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    name: { $first: "$name" },
+                    article: { $first: "$article" },
+                    quantity: { $sum: "$quantity" },
+                    totalAmount: { $sum: "$totalAmount" },
+                    price: { $first: "$price" },
+                },
+            },
+            {
+                $facet: {
+                    need_product: [{
+                        $match: {
+                            article: parseInt(req.body.article),
+                        },
+                    }, ],
+                    total_info: [{
+                        $group: {
+                            _id: "total",
+                            quantity: { $sum: "$quantity" },
+                            totalAmount: { $sum: "$totalAmount" },
+                        },
+                    }, ],
+                },
+            },
+        ]);
+        const need_product = percent[0].need_product;
+        const total_info = percent[0].total_info;
+        const start_time = req.body.start;
+        const end_time = req.body.end;
+        // console.log(total_info);
+        res.render(createPath("statics/dolya_pribyl"), {
+            need_product,
+            total_info,
+            start_time,
+            end_time,
+        });
     } catch (err) {
         console.log(err);
     }

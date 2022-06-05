@@ -31,7 +31,7 @@ router.post("/", async(req, res) => {
                     quantity: parseInt(cell.quantity) - parseInt(values[i]),
                 });
                 object.product = cell.product;
-                object.quantity = values[i];
+                object.quantity = parseInt(values[i]);
                 products[products.length] = object;
             }
         }

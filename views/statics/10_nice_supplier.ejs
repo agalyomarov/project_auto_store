@@ -14,7 +14,7 @@
         <div class="container">
             <h1 class="text-center mt-4">Статистика</h1>
             <%- include('../partials/static_header.ejs')%>
-                <h3>Поставщики</h3>
+                <h3>10 дешевый поставшик</h3>
                 <% suppliers.forEach(function(supplier){ %>
                     <div class="suppierm mb-3">
                         <h5>ФИО :
@@ -30,7 +30,7 @@
                             <%= supplier.telefone%>
                         </p>
                         <p>Категории :
-                            <%= supplier.category%>
+                            <%= supplier.supplierCategory.title%>
                         </p>
                         <hr>
                     </div>

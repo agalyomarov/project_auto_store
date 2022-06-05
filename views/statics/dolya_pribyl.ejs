@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>AutoStore</title>
+</head>
+
+<body>
+    <%- include('../partials/nav.ejs')%>
+        <div class="container">
+            <h1 class="text-center mt-4">Статистика</h1>
+            <%- include('../partials/static_header.ejs')%>
+                <h3>Доля одного товара от все обората период
+                    <%=start_time%> -
+                        <%=end_time%>
+                </h3>
+                <p>Количество проданных товар:
+                    <%=total_info[0].quantity%>
+                </p>
+                <p>Общий сумма прибыла:
+                    <%=total_info[0].totalAmount%>
+                </p>
+                <h4>
+                    Товар :
+                    <%=need_product[0].name%>
+                </h4>
+                <p>Артикул :
+                    <%=need_product[0].article%>
+                </p>
+                <p>продан :
+                    <%=need_product[0].quantity%> штук
+                </p>
+                <p>прибыл :
+                    <%=need_product[0].totalAmount%>
+                </p>
+                <h5>Доля в процентах от общего оборота</h5>
+                <p>Прибыла :
+                    <%=((need_product[0].totalAmount * 100)/total_info[0].totalAmount).toFixed(2)%>%
+                </p>
+                <p>Количество :
+                    <%=((need_product[0].quantity * 100)/total_info[0].quantity).toFixed(2)%>%
+                </p>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+
+</html>
