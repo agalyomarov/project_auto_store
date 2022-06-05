@@ -110,7 +110,10 @@ router.get("/10_nice_supplier", async(req, res) => {
 
 router.post("/dolya_probyl", async(req, res) => {
     try {
-        console.log(req.body);
+        // console.log(req.body);
+        if (!req.body.start && !req.body.end) {
+            return res.redirect("/static/product");
+        }
         const percent = await Purchases.aggregate([{
                 $match: {
                     dateOfPurchase: {
@@ -160,11 +163,16 @@ router.post("/dolya_probyl", async(req, res) => {
                 },
             },
         ]);
+
         const need_product = percent[0].need_product;
         const total_info = percent[0].total_info;
         const start_time = req.body.start;
         const end_time = req.body.end;
-        // console.log(total_info);
+        console.log(need_product);
+        console.log(total_info);
+        if (need_product.length == 0) {
+            return res.redirect("/static/product");
+        }
         res.render(createPath("statics/dolya_pribyl"), {
             need_product,
             total_info,
