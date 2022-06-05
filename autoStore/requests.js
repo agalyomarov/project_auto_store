@@ -1,4 +1,4 @@
-const { db } = require("../models/Suppy");
+const { db, deleteMany } = require("../models/Suppy");
 
 //////////////////////////////////////////////1 запрос////////////////////////////////////
 name_product = "Антифриз"; //Имя продукта
@@ -228,6 +228,108 @@ db.requests_from_buyers.aggregate([
                 },
             },
             totalAmount: { $sum: "$totalAmount" },
+        },
+    },
+]);
+
+//////////////////////////////////////////////9-Запрос///////////////////////////////////
+db.cells.aggregate([{
+        $count: "numberBox",
+    },
+    {
+        $project: {
+            emtpry_cell: { $subtract: [500, "$numberBox"] },
+        },
+    },
+]);
+
+//////////////////////////////////////////////7-Запрос///////////////////////////////////
+start_time = "2022-06-01"; //Начало периода
+end_time = "2022-06-19"; //конец периода
+db.defectivies.aggregate([{
+        $match: {
+            date: {
+                $gte: new Date(Date.parse(start_time)),
+                $lte: new Date(Date.parse(end_time)),
+            },
+        },
+    },
+    {
+        $group: {
+            _id: "defectives",
+            products: {
+                $push: {
+                    product_name: "$product.name",
+                    product_category: "$product.category",
+                    supplier_fullName: "$product.supplier.fullName",
+                    supplier_category: "$product.supplier.supplierCategory.title",
+                    date: "$date",
+                },
+            },
+            all_quantity: { $sum: "$quantity" },
+        },
+    },
+]);
+
+//////////////////////////////////////////////7-Запрос///////////////////////////////////
+start_time = "2022-06-05"; //Начало периода
+end_time = "2022-06-19"; //конец периода
+db.cells.aggregate([{
+        $group: {
+            _id: "cells",
+            products: {
+                $push: {
+                    name: "$product.name",
+                    category: "$product.category",
+                    quantity: "$quantity",
+                    added_date: "$added_date",
+                },
+            },
+            total_quantity: {
+                $sum: "$quantity",
+            },
+        },
+    },
+    { $unwind: "$products" },
+    {
+        $match: {
+            "products.added_date": {
+                $gte: new Date(Date.parse(start_time)),
+                $lte: new Date(Date.parse(end_time)),
+            },
+        },
+    },
+    // { $unwind: "$products" },
+    {
+        $group: {
+            _id: "cell",
+            products: {
+                $push: {
+                    product_name: "$products.name",
+                    product_category: "$products.category",
+                },
+            },
+            period_quantity: { $sum: "$products.quantity" },
+            // percent: { $divide: ["$period_quantity", "$total_quantity"] },
+            total_quantity: { $first: "$total_quantity" },
+        },
+    },
+    {
+        $project: {
+            _id: 0,
+            products: 1,
+            period_quantity: 1,
+            percent: {
+                $round: [{
+                        $divide: [
+                            { $multiply: ["$period_quantity", 100] },
+                            "$total_quantity",
+                        ],
+                    },
+                    2,
+                ],
+            },
+            total_quantity: 1,
         },
     },
 ]);
