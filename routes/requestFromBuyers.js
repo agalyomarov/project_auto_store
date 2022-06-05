@@ -22,17 +22,17 @@ router.get("/", async(req, res) => {
 
 router.post("/", async(req, res) => {
     try {
-        const array = Object.entries(req.body);
+        const keys = Object.keys(req.body);
+        const values = Object.values(req.body);
         const products = [];
         let totalAmount = 0;
-        for (let i = 0; i < array.length - 1; i++) {
-            if (array[i][1]) {
-                products[i] = {};
-                products[i].product = await ProductDirectory.findOne({
-                    _id: array[i][0],
+        for (let i = 0; i < keys.length - 1; i++) {
+            if (parseInt(values[i]) > 0) {
+                let product = await ProductDirectory.findOne({
+                    _id: keys[i],
                 });
-                products[i].quantity = array[i][1];
-                totalAmount += products[i].product.price * products[i].quantity;
+                totalAmount += product.price * values[i];
+                products[products.length] = { product, quantity: values[i] };
             }
         }
         await RequestsFromBuyers.create({

@@ -44,13 +44,11 @@ router.get("/supplier", async(req, res) => {
             {
                 $group: {
                     _id: "$supplier.fullName",
-                    supplier: {
-                        $addToSet: { supplier: "$supplier" },
-                    },
+                    counry: supplier.country,
                 },
             },
         ]);
-        console.log(suppliers[0].supplier);
+        console.log(suppliers);
         res.send("test");
     } catch (err) {
         console.log(err);
