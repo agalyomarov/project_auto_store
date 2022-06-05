@@ -9,6 +9,7 @@ const router = express.Router();
 router.get("/", async(req, res) => {
     try {
         const suppliers = await (await Supplier.find()).reverse();
+        // console.log(suppliers);
         res.render(createPath("statics/supplier"), { suppliers });
     } catch (err) {
         console.log(err);
