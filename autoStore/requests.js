@@ -1,4 +1,6 @@
-//1 запрос//
+const { db } = require("../models/Suppy");
+
+//////////////////////////////////////////////1 запрос////////////////////////////////////
 name_product = "Антифриз"; //Имя продукта
 db.product_directories.aggregate([
     { $match: { name: name_product } },
@@ -20,7 +22,7 @@ db.product_directories.aggregate([
     },
 ]);
 
-//2 запрос//
+////////////////////////////////////////////2 запрос//////////////////////////////////////////
 name_product = "Антифриз"; //Имя продукта
 db.suppies.aggregate([
     { $match: { "order.product.name": name_product } },
@@ -36,7 +38,7 @@ db.suppies.aggregate([
     },
 ]);
 
-//3 запрос//
+/////////////////////////////////////3 запрос////////////////////////////////////////////////
 name_product = "Антифриз"; //Имя продукта
 start_time = "2022-06-01"; //Начало периода
 end_time = "2022-06-19"; //конец периода
@@ -68,7 +70,7 @@ db.purchases.aggregate([{
     },
 ]);
 
-//4 запрос-TOP 10 продоваемый  товаров//
+/////////////////////////////4 запрос-TOP 10 продоваемый  товаров///////////////////////////////////
 db.purchases.aggregate([
     { $unwind: "$products" },
     {
@@ -88,7 +90,7 @@ db.purchases.aggregate([
     { $limit: 10 },
 ]);
 
-//4 запрос-TOP 10 дещевый поставщиков//
+///////////////////////////////4 запрос-TOP 10 дещевый поставщиков/////////////////////////////
 db.product_directories.aggregate([
     { $sort: { price: 1 } },
     {
@@ -113,7 +115,7 @@ db.product_directories.aggregate([
     { $limit: 10 },
 ]);
 
-//5 запрос//
+/////////////////////////5 запрос////////////////////////////////
 db.cells.aggregate([{
         $replaceRoot: {
             newRoot: {
@@ -200,6 +202,32 @@ db.cells.aggregate([{
                     },
                 },
             },
+        },
+    },
+]);
+
+/////////////// 10 - Запрос/////////////////////////////////////////
+db.requests_from_buyers.aggregate([
+    { $unwind: "$products" },
+    {
+        $project: {
+            totalAmount: "$totalAmount",
+            product_name: "$products.product.name",
+            product_category: "$products.product.category",
+            fullName: "$fullName",
+        },
+    },
+    {
+        $group: {
+            _id: "all",
+            zayavki: {
+                $push: {
+                    product_name: "$product_name",
+                    product_category: "$product_category",
+                    fullName: "$fullName",
+                },
+            },
+            totalAmount: { $sum: "$totalAmount" },
         },
     },
 ]);
